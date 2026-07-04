@@ -8,7 +8,9 @@ spec:
   source:
     repoURL: https://github.com/loxygenK/home-garden
     targetRevision: main
-    path: bootstrap
+    path: apps
+    directory:
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
