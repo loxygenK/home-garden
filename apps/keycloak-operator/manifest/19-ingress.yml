@@ -1,0 +1,24 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: keycloak
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+      - user.i.f4n.dev
+      secretName: keycloak-tls
+  rules:
+    - host: user.i.f4n.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: keycloak-service  # Referencing to the artifact of 11-keycloak.yml
+                port:
+                  number: 8080

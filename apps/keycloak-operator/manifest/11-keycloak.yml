@@ -1,0 +1,30 @@
+apiVersion: k8s.keycloak.org/v2beta1
+kind: Keycloak
+metadata:
+  name: keycloak
+  namespace: keycloak
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  instances: 1
+  db:
+    vendor: postgres
+    host: keycloak-db
+    usernameSecret:
+      name: keycloak-db-secret
+      key: username
+    passwordSecret:
+      name: keycloak-db-secret
+      key: password
+  hostname:
+    hostname: user.i.f4n.dev
+  ingress:
+    enabled: false  # 自分でTraefik Ingressを管理するため
+  proxy:
+    # Keycloak に、traefik (X-Forwarded をつける) の後ろに
+    # デプロイされていることを伝える。CORS・TLS 対策
+    headers: xforwarded
+  http:
+    # traefik の後ろにいるので、TLS の設定をこちらでせずに
+    # HTTP 起動を許可する
+    httpEnabled: true
