@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: soil
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/loxygenK/home-garden
+        revision: main
+        files:
+          - path: apps/*/pot.yml
+  template:
+    metadata:
+      name: '{{.path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/loxygenK/home-garden
+        targetRevision: main
+        path: 'apps/{{.path.path}}/manifest'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{.namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
