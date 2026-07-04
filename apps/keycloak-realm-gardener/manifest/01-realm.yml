@@ -1,0 +1,38 @@
+apiVersion: k8s.keycloak.org/v2beta1
+kind: KeycloakRealmImport
+metadata:
+  name: gardener
+  namespace: keycloak
+spec:
+  keycloakCRName: keycloak
+  realm:
+    realm: gardener
+    enabled: true
+    displayName: "Homelab SSO"
+    sslRequired: external
+
+    users:
+      - username: flisan
+        enabled: true
+        emailVerified: true
+        credentials:
+          - type: password
+            value: "changeme-please"
+            temporary: true
+        realmRoles:
+          - offline_access
+          - uma_authorization
+
+    clients:
+      - clientId: pve
+        name: "Proxmox VE"
+        enabled: true
+        protocol: openid-connect
+        publicClient: false
+        secret: "pve-client-secret-changeme"
+        redirectUris:
+          - "https://pve.i.f4n.dev/*"
+        webOrigins:
+          - "https://pve.i.f4n.dev"
+        standardFlowEnabled: true
+        directAccessGrantsEnabled: false

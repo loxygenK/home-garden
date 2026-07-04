@@ -4,6 +4,7 @@ metadata:
   name: soil
   namespace: argocd
 spec:
+  goTemplate: true
   generators:
     - git:
         repoURL: https://github.com/loxygenK/home-garden
@@ -18,7 +19,7 @@ spec:
       source:
         repoURL: https://github.com/loxygenK/home-garden
         targetRevision: main
-        path: 'apps/{{.path.path}}/manifest'
+        path: '{{.path.path}}/manifest'
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{.namespace}}'
