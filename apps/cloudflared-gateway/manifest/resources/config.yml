@@ -1,0 +1,12 @@
+tunnel: 2a7ec731-67ca-40d2-abf2-b1df4ef1833e
+credentials-file: /etc/cloudflared/creds/creds.json
+
+ingress:
+  - hostname: webhook-argocd.f4n.dev
+    path: ^/api/webhook$
+    service: https://argocd-server.argocd.svc.cluster.local:443
+    originRequest:
+      noTLSVerify: true
+  - hostname: webhook-argocd.f4n.dev
+    service: http_status:404
+  - service: http_status:404
