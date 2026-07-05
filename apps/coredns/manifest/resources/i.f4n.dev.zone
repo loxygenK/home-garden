@@ -1,0 +1,21 @@
+$ORIGIN i.f4n.dev.
+$TTL 60
+@	IN	SOA	ns1.i.f4n.dev.	admin.f4n.dev.	(
+			10	; serial
+			60	; refresh
+			60	; retry
+			300	; expire
+			60 )	; minimum TTL
+
+@	IN	NS	ns1.i.f4n.dev.
+ns1	IN	A	100.127.49.34
+iris	IN	A	100.127.49.34
+api.iris	IN	A	100.127.49.34
+k3s	IN	A	100.127.49.34
+pve	IN	A	100.127.49.34
+*.pve	IN	A	100.127.49.34
+omv	IN	A	100.127.49.34
+grafana	IN	A	100.127.49.34
+argocd	IN	A	100.127.49.34
+user	IN	A	100.127.49.34
+
