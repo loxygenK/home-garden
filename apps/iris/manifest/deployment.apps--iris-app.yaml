@@ -42,7 +42,7 @@ spec:
           env:
             - name: RUST_LOG
               value: iris=debug
-          image: ghcr.io/pastel-biota/iris:latest
+          image: ghcr.io/pastel-biota/iris:v2.0.0
           name: iris
           ports:
             - containerPort: 80
