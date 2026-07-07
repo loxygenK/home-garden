@@ -4,6 +4,9 @@ data:
   iris.toml: |
     host = "iris.i.f4n.dev"
 
+    # Todo: The normal image viewing can suffer because of the rate-limit
+    rate_limit = false
+
     [ingest]
     dir = "/app/iris-storage"
     listen = "0.0.0.0:80"
