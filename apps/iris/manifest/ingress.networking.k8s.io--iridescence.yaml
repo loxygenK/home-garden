@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  name: iridescence
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: iris.i.f4n.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: iridescence
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - iris.i.f4n.dev
+      secretName: iridescence-tls-staging

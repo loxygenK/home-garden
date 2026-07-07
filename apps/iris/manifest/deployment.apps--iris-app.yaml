@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: iris-app
+  name: iris-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iris-app
+  template:
+    metadata:
+      labels:
+        app: iris-app
+    spec:
+      imagePullSecrets:
+        - name: docker-ghcr-creds
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 10000
+      volumes:
+        - name: iris-dir
+          persistentVolumeClaim:
+            claimName: pvc-iris-dir
+        - configMap:
+            defaultMode: 420
+            name: iris-toml
+          name: iris-toml
+        - name: iris-secret-toml
+          secret:
+            defaultMode: 420
+            secretName: iris-secret-toml
+      containers:
+        - command:
+            - /app/iris
+            - server
+            - -c
+            - /app/iris.toml
+            - -c
+            - /app/iris.secret.toml
+          env:
+            - name: RUST_LOG
+              value: iris=debug
+          image: ghcr.io/pastel-biota/iris:latest
+          name: iris
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources: {}
+          securityContext:
+            runAsGroup: 10000
+            runAsUser: 10000
+          volumeMounts:
+            - mountPath: /app/iris-storage
+              name: iris-dir
+            - mountPath: /app/iris.toml
+              name: iris-toml
+              subPath: iris.toml
+            - mountPath: /app/iris.secret.toml
+              name: iris-secret-toml
+              subPath: iris.secret.toml

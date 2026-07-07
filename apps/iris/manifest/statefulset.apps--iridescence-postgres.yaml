@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: iridescence-postgres
+  name: iridescence-postgres
+spec:
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iridescence-postgres
+  serviceName: ''
+  template:
+    metadata:
+      labels:
+        app: iridescence-postgres
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  key: PG_DATABASE
+                  name: iridescence-configuration
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: PG_USER
+                  name: iridescence-configuration
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PG_PASSWORD
+                  name: iridescence-configuration
+          image: postgres@sha256:210f0b6ecb46f241fa1fc3ee63c430b0eb2d0c5141ddd26753299345ef760192
+          imagePullPolicy: IfNotPresent
+          name: iridescence-iridescence
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/postgresql
+              name: data
+      restartPolicy: Always
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
+        volumeMode: Filesystem

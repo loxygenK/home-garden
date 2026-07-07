@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: iridescence
+  name: iridescence
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iridescence
+  template:
+    metadata:
+      labels:
+        app: iridescence
+    spec:
+      containers:
+        - envFrom:
+            - secretRef:
+                name: iridescence-configuration
+          image: ghcr.io/pastel-biota/iridescence:latest
+          imagePullPolicy: Always
+          name: iridescence
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: docker-ghcr-creds
+      restartPolicy: Always

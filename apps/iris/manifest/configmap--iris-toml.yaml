@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  iris.toml: |
+    host = "iris.i.f4n.dev"
+
+    [ingest]
+    dir = "/app/iris-storage"
+    listen = "0.0.0.0:80"
+    cors_origin = ["https://iris.i.f4n.dev"]
+
+    [image.sizes.icon]
+    width = 64
+    height = 64
+    format = "webp"
+
+    [image.sizes.thumbnail]
+    width = 1024
+    height = 1024
+    format = "webp"
+
+    [image.sizes.main]
+    width = 2560
+    height = 1440
+    format = "png"
+metadata:
+  name: iris-toml

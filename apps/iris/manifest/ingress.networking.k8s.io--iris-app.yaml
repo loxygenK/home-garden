@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  name: iris-app
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: api.iris.i.f4n.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: iris-app
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - api.iris.i.f4n.dev
+      secretName: iris-tls
