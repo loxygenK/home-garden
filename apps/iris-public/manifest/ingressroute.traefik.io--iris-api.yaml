@@ -1,0 +1,15 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  generation: 1
+  name: iris-api
+spec:
+  entryPoints:
+  - websecure
+  routes:
+  - kind: Rule
+    match: Host(`iris-api.harulinwu.me`)
+    services:
+    - name: iris-app
+      port: 80
+  tls: {}

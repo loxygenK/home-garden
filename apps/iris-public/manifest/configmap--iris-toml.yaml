@@ -1,0 +1,27 @@
+apiVersion: v1
+data:
+  iris.toml: |
+    host = "iris.harulinwu.me"
+
+    [ingest]
+    dir = "/app/iris-storage"
+    listen = "0.0.0.0:80"
+    cors_origin = ["https://iris.harulinwu.me"]
+
+    [image.sizes.icon]
+    width = 64
+    height = 64
+    format = "webp"
+
+    [image.sizes.thumbnail]
+    width = 1024
+    height = 1024
+    format = "webp"
+
+    [image.sizes.main]
+    width = 2560
+    height = 1440
+    format = "png"
+kind: ConfigMap
+metadata:
+  name: iris-toml
