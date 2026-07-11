@@ -18,7 +18,7 @@ spec:
         - envFrom:
             - secretRef:
                 name: iridescence-configuration
-          image: ghcr.io/pastel-biota/iridescence:v2.0.5
+          image: ghcr.io/pastel-biota/iridescence:v2.1.0
           imagePullPolicy: Always
           name: iridescence
           ports:
