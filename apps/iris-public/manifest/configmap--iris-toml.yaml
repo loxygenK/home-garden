@@ -6,7 +6,10 @@ data:
     [ingest]
     dir = "/app/iris-storage"
     listen = "0.0.0.0:80"
-    cors_origin = ["https://iris.harulinwu.me"]
+    cors_origin = [
+      "https://iris.harulinwu.me",
+      "https://iris-public.i.f4n.dev",
+    ]
 
     [image.sizes.icon]
     width = 64
@@ -14,8 +17,8 @@ data:
     format = "webp"
 
     [image.sizes.thumbnail]
-    width = 1024
-    height = 1024
+    width = 320
+    height = 320
     format = "webp"
 
     [image.sizes.main]
