@@ -23,4 +23,6 @@ grafana	IN	CNAME	node
 argocd	IN	CNAME	node
 user	IN	CNAME	node
 
+dev.h	IN	CNAME	home-prime.akita-koi.ts.net.
+
 ; vim: set noexpandtab tabstop=12 shiftwidth=12:
