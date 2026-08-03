@@ -11,10 +11,10 @@ spec:
     vendor: postgres
     host: keycloak-db
     usernameSecret:
-      name: keycloak-db-secret
+      name: keycloak-db-credentials
       key: username
     passwordSecret:
-      name: keycloak-db-secret
+      name: keycloak-db-credentials
       key: password
   hostname:
     hostname: user.i.f4n.dev
