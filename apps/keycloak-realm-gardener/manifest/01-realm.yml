@@ -8,7 +8,7 @@ spec:
   realm:
     realm: gardener
     enabled: true
-    displayName: "Homelab SSO"
+    displayName: "Gardeners"
     sslRequired: external
 
     users:
@@ -29,10 +29,34 @@ spec:
         enabled: true
         protocol: openid-connect
         publicClient: false
-        secret: "pve-client-secret-changeme"
         redirectUris:
           - "https://pve.i.f4n.dev/*"
         webOrigins:
           - "https://pve.i.f4n.dev"
+        standardFlowEnabled: true
+        directAccessGrantsEnabled: false
+
+      - clientId: grafana
+        name: "Grafana"
+        enabled: true
+        protocol: openid-connect
+        publicClient: false
+        secret: "pve-client-secret-changeme"
+        redirectUris:
+          - "https://grafana.i.f4n.dev/*"
+        webOrigins:
+          - "https://grafana.i.f4n.dev"
+        standardFlowEnabled: true
+        directAccessGrantsEnabled: false
+
+      - clientId: headlamp
+        name: "Headlamp"
+        enabled: true
+        protocol: openid-connect
+        publicClient: false
+        redirectUris:
+          - "https://k3s.i.f4n.dev/*"
+        webOrigins:
+          - "https://k3s.i.f4n.dev"
         standardFlowEnabled: true
         directAccessGrantsEnabled: false
