@@ -1,0 +1,114 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: notifications-controller
+    app.kubernetes.io/name: argocd-notifications-controller
+    app.kubernetes.io/part-of: argocd
+  name: argocd-notifications-cm
+  namespace: argocd
+data:
+  service.webhook.discord: |
+    url: $discord-webhook-url
+    headers:
+      - name: Content-Type
+        value: application/json
+    retryMax: 3
+
+  trigger.on-discord-sync-succeeded: |
+    - description: Application sync completed and became healthy
+      send:
+        - discord-sync-succeeded
+      when: >-
+        app.status.operationState != nil &&
+        app.status.operationState.phase == 'Succeeded' &&
+        app.status.health.status == 'Healthy'
+      oncePer: app.status.operationState.syncResult.revision
+
+  trigger.on-discord-sync-failed: |
+    - description: Application sync failed
+      send:
+        - discord-sync-failed
+      when: app.status.operationState.phase in ['Error', 'Failed']
+      oncePer: app.status.operationState.finishedAt
+
+  template.discord-sync-succeeded: |
+    webhook:
+      discord:
+        method: POST
+        body: |
+          {
+            "username": "Argo CD",
+            "embeds": [
+              {
+                "title": "✅ Sync succeeded",
+                "url": "{{.secrets.argocdOrigin}}/applications/{{.app.metadata.name}}",
+                "description": "**{{.app.metadata.name}}** was synchronized successfully.",
+                "color": 5763719,
+                "fields": [
+                  {
+                    "name": "Application",
+                    "value": "`{{.app.metadata.name}}`",
+                    "inline": true
+                  },
+                  {
+                    "name": "Health",
+                    "value": "`{{.app.status.health.status}}`",
+                    "inline": true
+                  },
+                  {
+                    "name": "Revision",
+                    "value": "`{{.app.status.operationState.syncResult.revision}}`",
+                    "inline": false
+                  }
+                ],
+                "footer": {
+                  "text": "Argo CD"
+                },
+                "timestamp": "{{.app.status.operationState.finishedAt}}"
+              }
+            ]
+          }
+
+  template.discord-sync-failed: |
+    webhook:
+      discord:
+        method: POST
+        body: |
+          {
+            "username": "Argo CD",
+            "embeds": [
+              {
+                "title": "❌ Sync failed",
+                "url": "{{.secrets.argocdOrigin}}/applications/{{.app.metadata.name}}",
+                "description": "Synchronization of **{{.app.metadata.name}}** failed.",
+                "color": 15548997,
+                "fields": [
+                  {
+                    "name": "Application",
+                    "value": "`{{.app.metadata.name}}`",
+                    "inline": true
+                  },
+                  {
+                    "name": "Phase",
+                    "value": "`{{.app.status.operationState.phase}}`",
+                    "inline": true
+                  },
+                  {
+                    "name": "Revision",
+                    "value": "`{{.app.status.operationState.syncResult.revision}}`",
+                    "inline": false
+                  },
+                  {
+                    "name": "Message",
+                    "value": {{toJson .app.status.operationState.message}},
+                    "inline": false
+                  }
+                ],
+                "footer": {
+                  "text": "Argo CD"
+                },
+                "timestamp": "{{.app.status.operationState.finishedAt}}"
+              }
+            ]
+          }

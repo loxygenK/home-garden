@@ -5,6 +5,8 @@ metadata:
   namespace: argocd
 spec:
   goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
   generators:
     - git:
         repoURL: https://github.com/loxygenK/home-garden
@@ -14,6 +16,9 @@ spec:
   template:
     metadata:
       name: '{{.path.basename}}'
+      annotations:
+        notifications.argoproj.io/subscribe.on-discord-sync-succeeded.discord: ""
+        notifications.argoproj.io/subscribe.on-discord-sync-failed.discord: ""
     spec:
       project: default
       source:
