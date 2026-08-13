@@ -42,7 +42,7 @@ data:
             "embeds": [
               {
                 "title": "✅ Sync succeeded",
-                "url": "{{.secrets.argocdOrigin}}/applications/{{.app.metadata.name}}",
+                "url": "{{.secrets.argocdOrigin | toString}}/applications/{{.app.metadata.name}}",
                 "description": "**{{.app.metadata.name}}** was synchronized successfully.",
                 "color": 5763719,
                 "fields": [
@@ -80,7 +80,7 @@ data:
             "embeds": [
               {
                 "title": "❌ Sync failed",
-                "url": "{{.secrets.argocdOrigin}}/applications/{{.app.metadata.name}}",
+                "url": "{{.secrets.argocdOrigin | toString}}/applications/{{.app.metadata.name}}",
                 "description": "Synchronization of **{{.app.metadata.name}}** failed.",
                 "color": 15548997,
                 "fields": [
