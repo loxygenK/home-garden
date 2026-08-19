@@ -1,7 +1,7 @@
 $ORIGIN i.f4n.dev.
 $TTL 60
 @	IN	SOA	ns1.i.f4n.dev.	admin.f4n.dev.	(
-			2026070501	; serial
+			2026081901	; serial
 			3600	; refresh
 			900	; retry
 			604800	; expire
@@ -10,7 +10,7 @@ $TTL 60
 @	IN	NS	ns1.i.f4n.dev.
 
 node	IN	A	100.127.49.34	; rose
-node	IN	A	100.99.164.93	;hydrangea
+node	IN	A	100.99.164.93	; hydrangea
 
 ns1	IN	CNAME	node
 iris	IN	CNAME	node
@@ -22,6 +22,7 @@ omv	IN	CNAME	node
 grafana	IN	CNAME	node
 argocd	IN	CNAME	node
 user	IN	CNAME	node
+home	IN	CNAME	node
 
 dev.h	IN	CNAME	home-prime.akita-koi.ts.net.
 
