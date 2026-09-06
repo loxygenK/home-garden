@@ -7,6 +7,16 @@
   log
   errors
 }
+a.f4n.dev {
+  file /zones/a.f4n.dev.zone
+  log
+  errors
+}
+p.f4n.dev {
+  file /zones/p.f4n.dev.zone
+  log
+  errors
+}
 i.f4n.dev {
   file /zones/i.f4n.dev.zone
   log

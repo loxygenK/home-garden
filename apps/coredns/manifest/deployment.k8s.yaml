@@ -19,6 +19,9 @@ spec:
         - name: config
           configMap:
             name: coredns-config
+        - name: ext-managed-config
+          configMap:
+            name: f4n-dev-zone
       containers:
         - name: coredns
           image: coredns/coredns:1.14.1
@@ -36,3 +39,9 @@ spec:
             - name: config
               subPath: i.f4n.dev.zone
               mountPath: /zones/i.f4n.dev.zone
+            - name: ext-managed-config
+              subPath: p.f4n.dev.zone
+              mountPath: /zones/p.f4n.dev.zone
+            - name: ext-managed-config
+              subPath: a.f4n.dev.zone
+              mountPath: /zones/a.f4n.dev.zone
