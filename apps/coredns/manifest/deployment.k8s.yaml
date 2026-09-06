@@ -45,3 +45,6 @@ spec:
             - name: ext-managed-config
               subPath: a.f4n.dev.zone
               mountPath: /zones/a.f4n.dev.zone
+            - name: ext-managed-config
+              subPath: s.f4n.dev.zone
+              mountPath: /zones/s.f4n.dev.zone
