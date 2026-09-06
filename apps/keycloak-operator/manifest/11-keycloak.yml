@@ -17,7 +17,7 @@ spec:
       name: keycloak-db-credentials
       key: password
   hostname:
-    hostname: user.i.f4n.dev
+    hostname: user.a.f4n.dev
   ingress:
     enabled: false  # 自分でTraefik Ingressを管理するため
   proxy:

@@ -8,10 +8,10 @@ spec:
   ingressClassName: traefik
   tls:
     - hosts:
-        - home.i.f4n.dev
+        - home.a.f4n.dev
       secretName: home-assistant-tls
   rules:
-    - host: home.i.f4n.dev
+    - host: home.a.f4n.dev
       http:
         paths:
           - path: /

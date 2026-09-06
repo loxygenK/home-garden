@@ -14,6 +14,7 @@ spec:
     users:
       - username: flisan
         enabled: true
+        email: me@f4n.dev
         emailVerified: true
         credentials:
           - type: password
@@ -30,9 +31,9 @@ spec:
         protocol: openid-connect
         publicClient: false
         redirectUris:
-          - "https://pve.i.f4n.dev/*"
+          - "https://pve.a.f4n.dev/*"
         webOrigins:
-          - "https://pve.i.f4n.dev"
+          - "https://pve.a.f4n.dev"
         standardFlowEnabled: true
         directAccessGrantsEnabled: false
 
@@ -43,9 +44,9 @@ spec:
         publicClient: false
         secret: "pve-client-secret-changeme"
         redirectUris:
-          - "https://grafana.i.f4n.dev/*"
+          - "https://grafana.a.f4n.dev/*"
         webOrigins:
-          - "https://grafana.i.f4n.dev"
+          - "https://grafana.a.f4n.dev"
         standardFlowEnabled: true
         directAccessGrantsEnabled: false
 
@@ -55,8 +56,8 @@ spec:
         protocol: openid-connect
         publicClient: false
         redirectUris:
-          - "https://k3s.i.f4n.dev/*"
+          - "https://k3s.a.f4n.dev/*"
         webOrigins:
-          - "https://k3s.i.f4n.dev"
+          - "https://k3s.a.f4n.dev"
         standardFlowEnabled: true
         directAccessGrantsEnabled: false

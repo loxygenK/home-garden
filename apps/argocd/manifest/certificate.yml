@@ -6,7 +6,7 @@ metadata:
 spec:
   secretName: argocd-server-tls
   dnsNames:
-    - argocd.i.f4n.dev
+    - argocd.a.f4n.dev
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer

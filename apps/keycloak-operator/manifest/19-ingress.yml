@@ -9,10 +9,10 @@ spec:
   ingressClassName: traefik
   tls:
     - hosts:
-      - user.i.f4n.dev
+      - user.a.f4n.dev
       secretName: keycloak-tls
   rules:
-    - host: user.i.f4n.dev
+    - host: user.a.f4n.dev
       http:
         paths:
           - path: /

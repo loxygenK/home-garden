@@ -8,7 +8,7 @@ data:
     listen = "0.0.0.0:80"
     cors_origin = [
       "https://iris.harulinwu.me",
-      "https://iris-public.i.f4n.dev",
+      "https://iris-public.a.f4n.dev",
     ]
 
     [image.sizes.icon]
