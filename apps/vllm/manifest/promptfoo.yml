@@ -1,0 +1,114 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: promptfoo-data
+  namespace: vllm
+  finalizers:
+    - kubernetes.io/pvc-protection
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-path
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: promptfoo-providers
+  namespace: vllm
+data:
+  ui-providers.yaml: |
+    providers:
+      - id: openai:chat:Qwen/Qwen2.5-VL-3B-Instruct
+        label: vllm.a.f4n.dev
+        config:
+          apiBaseUrl: https://vllm.a.f4n.dev/v1
+          apiKey: not-required
+          temperature: 0.2
+          max_tokens: 8192
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: promptfoo
+  namespace: vllm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: promptfoo
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: promptfoo
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node.f4n.dev/durable
+                    operator: In
+                    values: ["true"]
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: promptfoo-data
+        - name: config
+          configMap:
+            name: promptfoo-providers
+      containers:
+        - name: promptfoo
+          image: ghcr.io/promptfoo/promptfoo:0.123.1
+          volumeMounts:
+            - name: data
+              mountPath: /home/promptfoo/.promptfoo
+            - name: config
+              mountPath: /home/promptfoo/.promptfoo/ui-providers.yaml
+              subPath: ui-providers.yaml
+          env:
+            - name: PROMPTFOO_REMOTE_API_BASE_URL
+              value: https://promptfoo.vllm.a.f4n.dev
+            - name: PROMPTFOO_REMOTE_APP_BASE_URL
+              value: https://promptfoo.vllm.a.f4n.dev
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: promptfoo
+  namespace: vllm
+spec:
+  selector:
+    app: promptfoo
+  ports:
+    - port: 80
+      targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  name: promptfoo
+  namespace: vllm
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: promptfoo.vllm.a.f4n.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: promptfoo
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - promptfoo.vllm.a.f4n.dev
+      secretName: promptfoo-tls-prod
