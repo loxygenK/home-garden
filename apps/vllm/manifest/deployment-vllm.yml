@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-server
+  namespace: vllm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vllm-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: vllm-server
+    spec:
+      containers:
+      - command:
+        - vllm
+        - serve
+        - Qwen/Qwen2.5-VL-3B-Instruct
+        - --port
+        - "80"
+        - --max-model-len
+        - "65536"
+        - --gpu-memory-utilization
+        - "0.65"
+        - --enforce-eager
+        - --enable-auto-tool-choice
+        - --tool-call-parser
+        - hermes
+        - --enable-log-requests
+        env:
+        - name: HF_HOME
+          value: /var/cache/huggingface
+        - name: VLLM_LOGGING_LEVEL
+          value: DEBUG
+        image: vllm/vllm-openai-rocm:latest
+        imagePullPolicy: IfNotPresent
+        name: vllm
+        resources:
+          limits:
+            amd.com/gpu: "1"
+        volumeMounts:
+          - mountPath: /var/cache/huggingface
+            name: huggingface-cache
+      restartPolicy: Always
+      securityContext: {}
+      tolerations:
+        - effect: NoSchedule
+          key: workload.flisan.dev/ephemeral
+          value: "true"
+      volumes:
+        - name: huggingface-cache
+          persistentVolumeClaim:
+            claimName: huggingface-local-cache

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  name: vllm-server
+  namespace: vllm
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: vllm.a.f4n.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: vllm-server
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - vllm.a.f4n.dev
+      secretName: vllm-tls-prod
