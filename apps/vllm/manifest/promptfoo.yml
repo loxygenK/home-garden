@@ -22,12 +22,11 @@ data:
   ui-providers.yaml: |
     providers:
       - id: openai:chat:Qwen/Qwen2.5-VL-3B-Instruct
-        label: vllm.a.f4n.dev
+        label: "vLLM-f4n"
         config:
           apiBaseUrl: https://vllm.a.f4n.dev/v1
           apiKey: not-required
-          temperature: 0.2
-          max_tokens: 8192
+          apiKeyRequired: false
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -63,7 +62,7 @@ spec:
             name: promptfoo-providers
       containers:
         - name: promptfoo
-          image: ghcr.io/promptfoo/promptfoo:0.123.1
+          image: ghcr.io/promptfoo/promptfoo:0.121.18
           volumeMounts:
             - name: data
               mountPath: /home/promptfoo/.promptfoo
