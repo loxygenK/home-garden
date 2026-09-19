@@ -42,7 +42,7 @@ spec:
           env:
             - name: RUST_LOG
               value: iris=debug
-          image: ghcr.io/pastel-biota/iris:v3.1.7
+          image: ghcr.io/pastel-biota/iris:v4.0.0
           imagePullPolicy: IfNotPresent
           name: iris
           ports:
