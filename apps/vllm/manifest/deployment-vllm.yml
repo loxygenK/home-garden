@@ -19,7 +19,7 @@ spec:
       - command:
         - vllm
         - serve
-        - Qwen/Qwen2.5-VL-3B-Instruct
+        - RedHatAI/Qwen2.5-VL-7B-Instruct-quantized.w4a16
         - --port
         - "80"
         - --max-model-len
@@ -39,7 +39,7 @@ spec:
         - name: HF_HOME
           value: /var/cache/huggingface
         - name: VLLM_LOGGING_LEVEL
-          value: DEBUG
+          value: INFO
         image: vllm/vllm-openai-rocm:latest
         imagePullPolicy: IfNotPresent
         name: vllm
