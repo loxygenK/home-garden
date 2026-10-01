@@ -69,3 +69,72 @@ spec:
         secret:
           defaultMode: 420
           secretName: iris-secret-toml
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: iris-accept-internal-ssr
+  namespace: iris-public
+spec:
+  podSelector:
+    matchLabels:
+      app: iris-app
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: iridescence
+      ports:
+        - protocol: TCP
+          port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: iris-accept-public-http-via-traefik
+  namespace: iris-public
+spec:
+  podSelector:
+    matchLabels:
+      app: iris-app
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            pod: cloudflared
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+        podSelector:
+          matchLabels:
+            app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: iris-request-internal-federation
+  namespace: iris-public
+spec:
+  podSelector:
+    matchLabels:
+      app: iris-app
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: iris
+        podSelector:
+          matchLabels:
+            app: iris-app
+      ports:
+        - protocol: TCP
+          port: 80
