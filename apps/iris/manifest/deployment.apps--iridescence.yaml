@@ -28,3 +28,50 @@ spec:
       imagePullSecrets:
         - name: docker-ghcr-creds
       restartPolicy: Always
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: iridescence-receive-public-http-via-traefik
+  namespace: iris
+spec:
+  podSelector:
+    matchLabels:
+      app: iridescence
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+        podSelector:
+          matchLabels:
+            app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: iridescence-request-internal-ssr
+  namespace: iris
+spec:
+  podSelector:
+    matchLabels:
+      app: iridescence
+  policyTypes:
+    - Egress
+  egress:
+    # FIXME: probably I should request using *.svc.cluster.local
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+        podSelector:
+          matchLabels:
+            app.kubernetes.io/name: traefik
+      ports:
+        - port: 8443
+          protocol: TCP

@@ -61,3 +61,69 @@ spec:
             - mountPath: /app/iris.secret.toml
               name: iris-secret-toml
               subPath: iris.secret.toml
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: iris-accept-internal-ssr
+  namespace: iris
+spec:
+  podSelector:
+    matchLabels:
+      app: iris-app
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: iridescence
+      ports:
+        - protocol: TCP
+          port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: iris-accept-public-http-via-traefik
+  namespace: iris
+spec:
+  podSelector:
+    matchLabels:
+      app: iris-app
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+        podSelector:
+          matchLabels:
+            app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: iris-accept-internal-federation
+  namespace: iris
+spec:
+  podSelector:
+    matchLabels:
+      app: iris-app
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: iris-public
+        podSelector:
+          matchLabels:
+            app: iris-app
+      ports:
+        - protocol: TCP
+          port: 80
