@@ -1,3 +1,5 @@
+# This resource is unused - shrinking down replica to verify the effect
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -9,7 +11,7 @@ spec:
     whenDeleted: Retain
     whenScaled: Retain
   podManagementPolicy: OrderedReady
-  replicas: 1
+  replicas: 0
   revisionHistoryLimit: 10
   selector:
     matchLabels:

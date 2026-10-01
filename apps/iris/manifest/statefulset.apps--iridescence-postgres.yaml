@@ -1,3 +1,5 @@
+# This resource is unused - shrinking down replica to verify the effect
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -8,7 +10,7 @@ spec:
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: Retain
     whenScaled: Retain
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: iridescence-postgres
